@@ -62,15 +62,15 @@ public class Global {
     /**
      * number of randomised scenarios for the emulation
      */
-    public static int iterations=50;
+    public static int iterations=5;
     /**
      * number of nodes in the underlying infrastructure (including access points and end-devices)
      */
-    public static int numberOfNodes=1250;   //10880 8780 6660 4525 2350 1250 650 146 34
+    public static int numberOfNodes=9;   //10880 8780 6660 4525 2350 1250 650 146 34
     /**
      * number of end-devices in the underlying infrastructure
      */
-    public static int numOfEndDevices=1000; //10000 8000 6000 4000 2000 1000 500 100 20
+    public static int numOfEndDevices=5; //10000 8000 6000 4000 2000 1000 500 100 20
     /**
      * enable proximity awareness for all nodes
      */
