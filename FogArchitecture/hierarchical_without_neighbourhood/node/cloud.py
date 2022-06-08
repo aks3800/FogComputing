@@ -1,4 +1,4 @@
-from HierarchicalWithoutNeighbourhood.node.node import Node
+from hierarchical_without_neighbourhood.node.node import Node
 
 
 class Cloud(Node):
@@ -6,4 +6,4 @@ class Cloud(Node):
         Node.__int__(self, node_id, children, parent)
 
     def __str__(self):
-        return f'Cloud {super().__str__()}'
+        return f"Cloud {super().__str__()}"

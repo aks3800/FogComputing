@@ -1,6 +1,6 @@
-from HierarchicalWithoutNeighbourhood.node.compute_node import ComputeNode
-from HierarchicalWithoutNeighbourhood.node.cloud import Cloud
-from HierarchicalWithoutNeighbourhood.node.node import Node
+from hierarchical_without_neighbourhood.node.compute_node import ComputeNode
+from hierarchical_without_neighbourhood.node.cloud import Cloud
+from hierarchical_without_neighbourhood.node.node import Node
 
 number_of_children = 2
 """number of children a node can have"""
@@ -11,10 +11,10 @@ def set_up_hierarchical_architecture_without_neighbourhood():
     print(cloud)
     for i in range(2, 8):
         create_tree(cloud, i)
-        print('\n\n')
+        print("\n\n")
         print_details(cloud)
 
-    print('\n\n')
+    print("\n\n")
     distance = find_distance_between_two_nodes(cloud, 4, 5)
     print(distance)
 
@@ -67,7 +67,9 @@ def find_lca(root: Node, source_id: int, destination_id: int) -> Node:
         if len(root.children) == 0:
             list_of_common_ancestors[i] = find_lca(None, source_id, destination_id)
         else:
-            list_of_common_ancestors[i] = find_lca(root.children[i], source_id, destination_id)
+            list_of_common_ancestors[i] = find_lca(
+                root.children[i], source_id, destination_id
+            )
 
     if None not in list_of_common_ancestors:
         return root
@@ -91,7 +93,9 @@ def find_distance_from_ancestor_node(root: Node, node_id: int) -> int:
         if len(root.children) == 0:
             distance_list[i] = find_distance_from_ancestor_node(None, node_id)
         else:
-            distance_list[i] = find_distance_from_ancestor_node(root.children[i], node_id)
+            distance_list[i] = find_distance_from_ancestor_node(
+                root.children[i], node_id
+            )
 
     distance = max(distance_list)
     return distance + 1 if distance >= 0 else -1
@@ -100,8 +104,12 @@ def find_distance_from_ancestor_node(root: Node, node_id: int) -> int:
 def find_distance_between_two_nodes(root: Node, source_id: int, destination_id: int):
     lca = find_lca(root, source_id, destination_id)
 
-    return find_distance_from_ancestor_node(lca, source_id) + find_distance_from_ancestor_node(lca,
-                                                                                               destination_id) if lca else -1
+    return (
+        find_distance_from_ancestor_node(lca, source_id)
+        + find_distance_from_ancestor_node(lca, destination_id)
+        if lca
+        else -1
+    )
 
 
 """
