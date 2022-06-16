@@ -1,19 +1,19 @@
-from hierarchical_with_neighbourhood.node.compute_node import ComputeNode
-from hierarchical_with_neighbourhood.node.cloud import Cloud
-from hierarchical_with_neighbourhood.node.node import Node
+from hybrid.node.compute_node import ComputeNode
+from hybrid.node.cloud import Cloud
+from hybrid.node.node import Node
 
 
-def set_up_hierarchical_architecture_with_neighbourhood(
+def set_up_hybrid_architecture(
     total_number_of_nodes: int, maximum_number_of_children_per_node: int
 ):
     cloud = Cloud(1, maximum_number_of_children_per_node, None)
     print(cloud)
     for i in range(2, total_number_of_nodes):
-        create_tree(cloud, i, maximum_number_of_children_per_node)
+        create_tree(cloud, cloud, i, 0, maximum_number_of_children_per_node)
         print("\n\n")
         print_details(cloud)
-    print("\n\n")
-    print(shortest_path(cloud, 1, 2))
+    # print("\n\n")
+    # print(shortest_path(cloud, 8, 4))
 
 
 def get_node_with_id(node: Node, id: int):
@@ -65,16 +65,47 @@ def update_neighbourhood(parent: Node, neighbour_child: Node):
         neighbour_child.add_to_neighbourhood(child_of_parent)
 
 
-def create_tree(node, id, maximum_number_of_children_per_node):
+def get_nodes_on_level(root: Node, level: int):
+    list_of_nodes = []
+
+    def get_nodes(node: Node, current_level: int, required_level: int):
+        if node is None:
+            return
+        if current_level is required_level:
+            list_of_nodes.append(node)
+        for children in node.children:
+            get_nodes(children, current_level + 1, required_level)
+
+    get_nodes(root, 0, level)
+    return list_of_nodes
+
+
+def update_neighbourhood_at_level(root, level, node: Node):
+    nodes_on_level = get_nodes_on_level(root, level)
+    for level_node in nodes_on_level:
+        if level_node.id is not node.id:
+            level_node.add_to_neighbourhood(node)
+            node.add_to_neighbourhood(level_node)
+
+
+def create_tree(root, node, id, level, maximum_number_of_children_per_node):
     if len(node.children) < maximum_number_of_children_per_node:
         compute_node = ComputeNode(id, maximum_number_of_children_per_node, node.id)
         node.add_child(compute_node)
         node.child_added()
         update_neighbourhood(node, compute_node)
+        if len(node.children) == 1:
+            update_neighbourhood_at_level(root, level + 1, compute_node)
     else:
         node_with_minimum_children = get_node_with_minimum_children(node)
         node.child_added()
-        create_tree(node_with_minimum_children, id, maximum_number_of_children_per_node)
+        create_tree(
+            root,
+            node_with_minimum_children,
+            id,
+            level + 1,
+            maximum_number_of_children_per_node,
+        )
 
 
 def print_details(node):
