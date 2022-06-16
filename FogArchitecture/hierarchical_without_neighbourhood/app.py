@@ -9,14 +9,9 @@ class HierarchicalWithoutNeighbourhoodArchitecture:
 
     def set_up(self, total_number_of_nodes):
         cloud = Cloud(1, self.number_of_children, None)
-        print(cloud)
         for i in range(2, total_number_of_nodes):
             self.__create_tree(cloud, i)
-            print("\n\n")
-            self.print_details(cloud)
-
-        print("\n\n")
-        print(self.shortest_path(cloud, 4, 5))
+        return cloud
 
     def __get_node_with_minimum_children(self, node: Node) -> ComputeNode:
         minimum_child_node = node.children[0]
@@ -116,7 +111,7 @@ class HierarchicalWithoutNeighbourhoodArchitecture:
             else -1
         )
 
-    def shortest_path(self, cloud, source_id, destination_id):
+    def shortest_path(self, cloud: Node, source_id: int, destination_id: int):
         dist = self.__find_distance_between_two_nodes(cloud, source_id, destination_id)
         return {"shortestDistance": dist}
 
