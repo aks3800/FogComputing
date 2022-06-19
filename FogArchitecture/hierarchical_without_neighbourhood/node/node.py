@@ -9,8 +9,11 @@ class Node:
         self.number_of_nodes = 1
 
     def __str__(self):
-        return f'node (id={self.id}) (parent={self.parent}) (m={self.max_children}) (n={len(self.children)})' \
-               f' (total nodes={self.number_of_nodes})'
+        return (
+            f"node (id={self.id}) (parent={self.parent}) (m={self.max_children}) (n={len(self.children)})"
+            f" (total nodes={self.number_of_nodes})"
+            f" ({list(map(lambda x: x.id, self.children))}))"
+        )
 
     def add_child(self, child):
         """function to add a child node to the list of children"""

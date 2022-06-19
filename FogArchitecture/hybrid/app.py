@@ -9,7 +9,7 @@ class HybridArchitecture:
 
     def set_up(self, total_number_of_nodes):
         cloud = Cloud(1, self.number_of_children, None)
-        for i in range(2, total_number_of_nodes):
+        for i in range(2, total_number_of_nodes + 1):
             self.__create_tree(cloud, cloud, i, 0)
         return cloud
 

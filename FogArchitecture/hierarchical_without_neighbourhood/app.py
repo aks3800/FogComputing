@@ -9,7 +9,7 @@ class HierarchicalWithoutNeighbourhoodArchitecture:
 
     def set_up(self, total_number_of_nodes):
         cloud = Cloud(1, self.number_of_children, None)
-        for i in range(2, total_number_of_nodes):
+        for i in range(2, total_number_of_nodes + 1):
             self.__create_tree(cloud, i)
         return cloud
 
@@ -111,12 +111,63 @@ class HierarchicalWithoutNeighbourhoodArchitecture:
             else -1
         )
 
-    def shortest_path(self, cloud: Node, source_id: int, destination_id: int):
-        dist = self.__find_distance_between_two_nodes(cloud, source_id, destination_id)
-        return {"shortestDistance": dist}
+    # def shortest_path(self, cloud: Node, source_id: int, destination_id: int):
+    #     dist = self.__find_distance_between_two_nodes(cloud, source_id, destination_id)
+    #     return {"shortestDistance": dist}
+
+    def __get_node_with_id(self, node: Node, id: int):
+        if node.id == id:
+            return node
+        else:
+            if len(node.children) == 0:
+                return None
+            else:
+                for child in node.children:
+                    n = self.__get_node_with_id(child, id)
+                    if n:
+                        return n
+
+    def shortest_path(self, cloud, source_id, destination_id):
+        visited = []
+        source_node = self.__get_node_with_id(cloud, source_id)
+        queue = [{"node": source_node, "dist": 0}]
+        visited.append(source_id)
+
+        while len(queue) > 0:
+            element = queue.pop(0)
+            n = element.get("node")
+            dist = element.get("dist")
+            if n.id == destination_id:
+                return {"shortestDistance": dist}
+            neighbours = n.children.copy()
+            if n.parent is not None:
+                parent_node = self.__get_node_with_id(cloud, n.parent)
+                if parent_node is not None:
+                    neighbours.append(parent_node)
+            for neighbour in neighbours:
+                if neighbour.id not in visited:
+                    queue.append({"node": neighbour, "dist": dist + 1})
+                    visited.append(neighbour.id)
+
+        return {"shortestDistance": -1}
 
 
 """
+                                1
+                            
+                    2           3          4
+                    
+                5           6           7
+
+
+
+
+
+
+
+
+
+
 
                             cloud
                             /   \

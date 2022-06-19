@@ -8,15 +8,32 @@ from hierarchical_with_neighbourhood.app import (
 from hybrid.app import (
     HybridArchitecture,
 )
+from pandas import *
+
+
+def create_matrix(architecture, cloud, total_nodes):
+    rows, cols = (total_nodes, total_nodes)
+    arr = []
+    for i in range(rows):
+        col = []
+        for j in range(cols):
+            shortestDistance = architecture.shortest_path(cloud, i + 1, j + 1).get(
+                "shortestDistance"
+            )
+            col.append(shortestDistance)
+        arr.append(col)
+    return arr
+
 
 if __name__ == "__main__":
     total_number_of_nodes = 7
-    maximum_number_of_children_per_node = 2
+    maximum_number_of_children_per_node = 3
     arch = HierarchicalWithoutNeighbourhoodArchitecture(
         maximum_number_of_children_per_node=maximum_number_of_children_per_node
     )
     cloud_node = arch.set_up(total_number_of_nodes=total_number_of_nodes)
-    print(arch.shortest_path(cloud_node, 4, 5))
+    matrix = create_matrix(arch, cloud_node, total_number_of_nodes)
+    print(DataFrame(matrix))
 
     print("\n\n")
 
@@ -24,7 +41,8 @@ if __name__ == "__main__":
         maximum_number_of_children_per_node=maximum_number_of_children_per_node
     )
     cloud_node = arch.set_up(total_number_of_nodes=total_number_of_nodes)
-    print(arch.shortest_path(cloud_node, 4, 5))
+    matrix = create_matrix(arch, cloud_node, total_number_of_nodes)
+    print(DataFrame(matrix))
 
     print("\n\n")
 
@@ -32,4 +50,5 @@ if __name__ == "__main__":
         maximum_number_of_children_per_node=maximum_number_of_children_per_node
     )
     cloud_node = arch.set_up(total_number_of_nodes=total_number_of_nodes)
-    print(arch.shortest_path(cloud_node, 4, 5))
+    matrix = create_matrix(arch, cloud_node, total_number_of_nodes)
+    print(DataFrame(matrix))
