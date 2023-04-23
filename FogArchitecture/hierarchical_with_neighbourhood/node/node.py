@@ -1,3 +1,6 @@
+from util import Utils
+
+
 class Node:
     """Base class to represent a basic node"""
 
@@ -28,9 +31,11 @@ class Node:
     def add_to_neighbourhood(self, node):
         node_already_present = False
         for neighbour in self.neighbourhood:
-            if neighbour.id == node.id:
+            if neighbour.get("compute_node").id == node.id:
                 node_already_present = True
                 break
 
         if not node_already_present and node.id != self.id:
-            self.neighbourhood.append(node)
+            self.neighbourhood.append(
+                {"compute_node": node, "distance": Utils.get_random_distance()}
+            )
